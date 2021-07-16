@@ -1,9 +1,11 @@
 package com.ywalakamar.notekeeper;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +14,8 @@ import androidx.appcompat.widget.Toolbar;
 import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
-
+    public static final String NOTE_INFO="com.ywalakamar.notekeeper.NOTE_INFO";
+    private NoteInfo note;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +34,26 @@ public class NoteActivity extends AppCompatActivity {
 
         /*Set the adapter to the spinner*/
         spinnerCourses.setAdapter(coursesAdapter);
+
+        readDisplayStateValues();
+
+        EditText textNoteTitle=findViewById(R.id.text_note_title);
+        EditText textNoteText=findViewById(R.id.text_note_text);
+
+        displayNote(spinnerCourses, textNoteTitle, textNoteText);
+    }
+
+    private void displayNote(Spinner spinnerCourses, EditText textNoteTitle, EditText textNoteText) {
+        List<CourseInfo> courses=DataManager.getInstance().getCourses();
+        int courseIndex=courses.indexOf(note.getCourse());
+        spinnerCourses.setSelection(courseIndex);
+        textNoteTitle.setText(note.getTitle());
+        textNoteText.setText(note.getText());
+    }
+
+    private void readDisplayStateValues() {
+        Intent intent=getIntent();
+        note=intent.getParcelableExtra(NOTE_INFO);
     }
 
     @Override

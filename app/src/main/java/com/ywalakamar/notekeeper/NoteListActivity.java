@@ -27,7 +27,8 @@ public class NoteListActivity extends AppCompatActivity {
     }
 
     private void initializeDisplayContent(){
-        ListView listNotes=findViewById(R.id.list_notes);
+        /*use final to make variable accessible from an anonymous class*/
+        final ListView listNotes=findViewById(R.id.list_notes);
         List<NoteInfo> notes=DataManager.getInstance().getNotes();
 
         /*create adapter*/
@@ -35,12 +36,16 @@ public class NoteListActivity extends AppCompatActivity {
 
         listNotes.setAdapter(notesAdapter);
 
-        /*Use anonymous class*/
+        /*Create an onclick event that uses an anonymous function*/
         listNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent=new Intent(NoteListActivity.this, NoteActivity.class);
+
+                /*Get note info that corresponds to a selection*/
+                NoteInfo note= (NoteInfo) listNotes.getItemAtPosition(position);
+                intent.putExtra(NoteActivity.NOTE_INFO, note);
 
                 /*Launch activity*/
                 startActivity(intent);
