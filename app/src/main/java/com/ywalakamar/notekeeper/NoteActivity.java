@@ -14,7 +14,8 @@ import androidx.appcompat.widget.Toolbar;
 import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
-    public static final String NOTE_INFO="com.ywalakamar.notekeeper.NOTE_INFO";
+    public static final String NOTE_POSITION ="com.ywalakamar.notekeeper.NOTE_POSITION";
+    public static final int POSITION_NOT_SET = -1;
     private NoteInfo note;
     private boolean isNewNote;
     @Override
@@ -59,9 +60,18 @@ public class NoteActivity extends AppCompatActivity {
 
     private void readDisplayStateValues() {
         Intent intent=getIntent();
-        note=intent.getParcelableExtra(NOTE_INFO);
-        /*nullify isNewNote and note */
-        isNewNote = note==null;
+
+        /*Get selected item position from the EXTRA*/
+        int position=intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET);
+
+        /*set isNewNote to false(POSITION_NOT_SET)*/
+        isNewNote = position==POSITION_NOT_SET;
+
+        /*is isNewNote is false*/
+        if(!isNewNote){
+            /*retrieve note from position*/
+            note=DataManager.getInstance().getNotes().get(position);
+        }
     }
 
     @Override

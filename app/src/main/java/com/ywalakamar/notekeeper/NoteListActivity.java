@@ -5,8 +5,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -45,14 +43,14 @@ public class NoteListActivity extends AppCompatActivity {
 
         listNotes.setAdapter(notesAdapter);
 
+        /*When a user makes a selection*/
         /*Create an onclick event that uses an anonymous class*/
         listNotes.setOnItemClickListener((parent, view, position, id) -> {
 
             Intent intent=new Intent(NoteListActivity.this, NoteActivity.class);
 
-            /*Get note info that corresponds to a selection*/
-            NoteInfo note= (NoteInfo) listNotes.getItemAtPosition(position);
-            intent.putExtra(NoteActivity.NOTE_INFO, note);
+            /*pass the selected item position as an Intent EXTRA*/
+            intent.putExtra(NoteActivity.NOTE_POSITION, position);
 
             /*Launch activity*/
             startActivity(intent);
