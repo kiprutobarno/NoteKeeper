@@ -12,6 +12,8 @@ import android.widget.ListView;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.List;
 
 public class NoteListActivity extends AppCompatActivity {
@@ -23,6 +25,13 @@ public class NoteListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_note_list);
         Toolbar toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        FloatingActionButton fab=findViewById(R.id.fab);
+        fab.setOnClickListener(v -> {
+            Intent intent=new Intent(NoteListActivity.this, NoteActivity.class);
+            startActivity(intent);
+        });
+
         initializeDisplayContent();
     }
 
@@ -36,20 +45,17 @@ public class NoteListActivity extends AppCompatActivity {
 
         listNotes.setAdapter(notesAdapter);
 
-        /*Create an onclick event that uses an anonymous function*/
-        listNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        /*Create an onclick event that uses an anonymous class*/
+        listNotes.setOnItemClickListener((parent, view, position, id) -> {
 
-                Intent intent=new Intent(NoteListActivity.this, NoteActivity.class);
+            Intent intent=new Intent(NoteListActivity.this, NoteActivity.class);
 
-                /*Get note info that corresponds to a selection*/
-                NoteInfo note= (NoteInfo) listNotes.getItemAtPosition(position);
-                intent.putExtra(NoteActivity.NOTE_INFO, note);
+            /*Get note info that corresponds to a selection*/
+            NoteInfo note= (NoteInfo) listNotes.getItemAtPosition(position);
+            intent.putExtra(NoteActivity.NOTE_INFO, note);
 
-                /*Launch activity*/
-                startActivity(intent);
-            }
+            /*Launch activity*/
+            startActivity(intent);
         });
     }
 }
