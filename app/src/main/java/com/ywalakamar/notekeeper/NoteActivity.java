@@ -18,6 +18,10 @@ public class NoteActivity extends AppCompatActivity {
     public static final int POSITION_NOT_SET = -1;
     private NoteInfo note;
     private boolean isNewNote;
+    private Spinner spinnerCourses;
+    private EditText textNoteTitle;
+    private EditText textNoteText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +31,7 @@ public class NoteActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         /*Spinner is a drop down menu*/
-        Spinner spinnerCourses=findViewById(R.id.spinner_courses);
+        spinnerCourses = findViewById(R.id.spinner_courses);
         List<CourseInfo> courses=DataManager.getInstance().getCourses();
 
         /*Create adapter*/
@@ -39,8 +43,8 @@ public class NoteActivity extends AppCompatActivity {
 
         readDisplayStateValues();
 
-        EditText textNoteTitle=findViewById(R.id.text_note_title);
-        EditText textNoteText=findViewById(R.id.text_note_text);
+        textNoteTitle = findViewById(R.id.text_note_title);
+        textNoteText = findViewById(R.id.text_note_text);
 
         /*
           if isNewNote is false, then display note
@@ -83,10 +87,25 @@ public class NoteActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_send_email) {
+            sendEmail();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sendEmail() {
+        CourseInfo course= (CourseInfo) spinnerCourses.getSelectedItem();
+        String subject=textNoteTitle.getText().toString();
+        String body="Check out what I learned on Pluralsight course\""+course.getTitle()+"\"\n"+textNoteText.getText();
+
+        /*create an implicit intent*/
+        Intent intent=new Intent(Intent.ACTION_SEND);
+        /*set MIMETYPE*/
+        intent.setType("message/rfc2822");
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_TEXT, body);
+        startActivity(intent);
     }
 }
